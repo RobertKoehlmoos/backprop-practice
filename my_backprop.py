@@ -2,7 +2,7 @@ from keras.datasets import mnist
 
 (train_X, train_y), (test_X, test_y) = mnist.load_data()
 
-print('X_train: ' + str(train_X.shape))
-print('Y_train: ' + str(train_y.shape))
-print('X_test:  '  + str(test_X.shape))
-print('Y_test:  '  + str(test_y.shape))
+print(f'X_train: {train_X.shape}')
+print(f'Y_train: {train_y.shape}')
+print(f'X_test:  {test_X.shape}')
+print(f'Y_test:  {test_y.shape}')
