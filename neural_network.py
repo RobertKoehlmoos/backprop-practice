@@ -1,4 +1,4 @@
-from typing import Iterable, List, Optional
+from typing import Sequence, List, Optional
 
 import numpy as np
 
@@ -23,9 +23,7 @@ def logistic_prime(x: np.ndarray) -> np.ndarray:
 
 
 class MLP:
-    def __init__(self, layer_sizes: Iterable[int], seed: Optional[int] = None):
-        if seed:
-            np.random.seed(seed)  # good science is repeatable
+    def __init__(self, layer_sizes: Sequence[int]):
         self.layer_sizes = layer_sizes
         self.biases = [np.random.randn(y, 1) for y in layer_sizes[1:]]
         # x is the size of the output from the previous layer, y is the size of the layer the weight outputs are going to
