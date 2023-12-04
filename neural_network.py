@@ -52,24 +52,23 @@ class MLP:
         :param batch_size: Size of each training batch before update
         :param learning_rate: Learning rate to use when updating the model's parameters
         """
+        batches = tuple((train_x[j: j + batch_size], train_y[j: j + batch_size])
+                        for j in range(0, len(train_x), batch_size))
         for i in range(epochs):
-            # training
-            batches = (zip(train_x[j: j + batch_size], train_y[j: j + batch_size])
-                       for j in range(0, len(train_x), batch_size))
-            for batch in batches:
+            for batch_x, batch_y in batches:
                 # creating 0 filled matrices to accumulate the rates of change
                 weights_update = [np.zeros(weight.shape) for weight in self.weights]
                 biases_update = [np.zeros(bias.shape) for bias in self.biases]
-                for x, y in batch:
+                for x, y in zip(batch_x, batch_y):
                     delta_weights, delta_biases = self.backprop(x, y)
                     weights_update = [weight_update + delta_weight
                                       for weight_update, delta_weight in zip(weights_update, delta_weights)]
                     biases_update = [bias_update + delta_bias
                                      for bias_update, delta_bias in zip(biases_update, delta_biases)]
                 # performing the updates
-                self.weights = [weight - (learning_rate / batch_size) * weight_update
+                self.weights = [weight - (learning_rate / len(batch_x)) * weight_update
                                 for weight, weight_update in zip(self.weights, weights_update)]
-                self.biases = [bias - (learning_rate / batch_size) * bias_update
+                self.biases = [bias - (learning_rate / len(batch_x)) * bias_update
                                for bias, bias_update in zip(self.biases, biases_update)]
             # running tests to track performance based on accuracy
             correct = 0
@@ -77,7 +76,7 @@ class MLP:
                 prediction = self.feedforward(x)
                 if np.argmax(prediction) == np.argmax(y):
                     correct += 1
-            print(f"Accuracy for epoch {i}: {correct / len(train_x)}")
+            print(f"Accuracy for epoch {i}: {correct / len(test_x)}")
 
     def backprop(self, x: np.ndarray, y: np.ndarray) -> (List[np.ndarray], List[np.ndarray]):
         """

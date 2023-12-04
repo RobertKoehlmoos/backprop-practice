@@ -53,16 +53,16 @@ class MLP:
         :param batch_size: Size of each training batch before update
         :param learning_rate: Learning rate to use when updating the model's parameters
         """
+        batches = tuple((train_x[j: j + batch_size, :], train_y[j: j + batch_size, :])
+                        for j in range(0, len(train_x), batch_size))
         for i in range(epochs):
-            # training
-            batches = ((train_x[j: j + batch_size, :], train_y[j: j + batch_size, :])
-                       for j in range(0, len(train_x), batch_size))
             for x, y in batches:
                 delta_weights, delta_biases = self.backprop(x, y)
                 # performing the updates
-                self.weights = [weight - (learning_rate / batch_size) * weight_update.sum(0)
+                # we need to use x.shape[0] to account for the final batch being a potentially different size
+                self.weights = [weight - (learning_rate / x.shape[0]) * weight_update.sum(0)
                                 for weight, weight_update in zip(self.weights, delta_weights)]
-                self.biases = [bias - (learning_rate / batch_size) * bias_update.sum(0)
+                self.biases = [bias - (learning_rate / x.shape[0]) * bias_update.sum(0)
                                for bias, bias_update in zip(self.biases, delta_biases)]
             # running tests to track performance based on accuracy
             prediction = self.feedforward(test_x)  # (B, o), for predictions and y
@@ -98,7 +98,8 @@ class MLP:
             delta_a = delta_z @ self.weights[-i + 1]  # (B, l + 1) @ (l+1, l).T = (B, l)
             delta_z = delta_a * logistic_prime(activations[-i])  # backpropagation from the activation to the sum
             delta_biases.append(delta_z)
-            delta_weights.append(delta_z[:, :, np.newaxis] @ activations[-i - 1][:, np.newaxis, :])  # (B, l, 1) @ (B, 1, l-1) = (B, l, l-1)
+            delta_weights.append(delta_z[:, :, np.newaxis] @ activations[-i - 1][:, np.newaxis,
+                                                             :])  # (B, l, 1) @ (B, 1, l-1) = (B, l, l-1)
         delta_weights.reverse()
         delta_biases.reverse()
         return delta_weights, delta_biases

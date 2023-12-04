@@ -26,11 +26,10 @@ for i, y in enumerate(test_y):
 
 my_nn = neural_network.MLP([28*28, 30, 30, 10])
 start = time.time()
-my_nn.sgd(train_x_flattened[:10000], train_y_vectorized[:10000], test_x_flattened, test_y_vectorized, epochs=20, batch_size=100)
+my_nn.sgd(train_x_flattened, train_y_vectorized, test_x_flattened, test_y_vectorized, epochs=10, batch_size=100)
 print(f'Time to train for non-batched implementation: {time.time() - start}')
 
 # for the batched version
-
 train_x_flattened = train_X.reshape(-1, 28*28)/255
 test_x_flattened = test_X.reshape(-1, 28*28)/255
 train_y_vectorized = np.eye(10)[train_y]
@@ -38,56 +37,36 @@ test_y_vectorized = np.eye(10)[test_y]
 
 my_nn = neural_network_batch.MLP([28*28, 30, 30, 10])
 start = time.time()
-my_nn.sgd(train_x_flattened[:10000], train_y_vectorized[:10000], test_x_flattened, test_y_vectorized, epochs=20, batch_size=100)
+my_nn.sgd(train_x_flattened, train_y_vectorized, test_x_flattened, test_y_vectorized, epochs=10, batch_size=100)
 print(f'Time to train for batched implementation: {time.time()- start}')
 
 # Example Output
-# Using TensorFlow backend.
 # X_train: (60000, 28, 28)
 # Y_train: (60000,)
 # X_test:  (10000, 28, 28)
 # Y_test:  (10000,)
-# Accuracy for epoch 0: 0.3397
-# Accuracy for epoch 1: 0.4623
-# Accuracy for epoch 2: 0.5375
-# Accuracy for epoch 3: 0.585
-# Accuracy for epoch 4: 0.6207
-# Accuracy for epoch 5: 0.6483
-# Accuracy for epoch 6: 0.668
-# Accuracy for epoch 7: 0.6832
-# Accuracy for epoch 8: 0.6949
-# Accuracy for epoch 9: 0.704
-# Accuracy for epoch 10: 0.7118
-# Accuracy for epoch 11: 0.718
-# Accuracy for epoch 12: 0.7247
-# Accuracy for epoch 13: 0.7297
-# Accuracy for epoch 14: 0.7351
-# Accuracy for epoch 15: 0.7418
-# Accuracy for epoch 16: 0.7451
-# Accuracy for epoch 17: 0.75
-# Accuracy for epoch 18: 0.7566
-# Accuracy for epoch 19: 0.7613
-# Time to train for non-batched implementation: 27.25707173347473
-# Accuracy for epoch 0: 0.2284
-# Accuracy for epoch 1: 0.34
-# Accuracy for epoch 2: 0.4336
-# Accuracy for epoch 3: 0.5093
-# Accuracy for epoch 4: 0.5689
-# Accuracy for epoch 5: 0.6164
-# Accuracy for epoch 6: 0.6495
-# Accuracy for epoch 7: 0.6767
-# Accuracy for epoch 8: 0.6939
-# Accuracy for epoch 9: 0.7065
-# Accuracy for epoch 10: 0.7115
-# Accuracy for epoch 11: 0.7187
-# Accuracy for epoch 12: 0.7214
-# Accuracy for epoch 13: 0.7268
-# Accuracy for epoch 14: 0.7294
-# Accuracy for epoch 15: 0.7352
-# Accuracy for epoch 16: 0.7404
-# Accuracy for epoch 17: 0.7428
-# Accuracy for epoch 18: 0.7444
-# Accuracy for epoch 19: 0.7461
-# Time to train for batched implementation: 19.2605619430542
+# Accuracy for epoch 0: 0.6557
+# Accuracy for epoch 1: 0.7209
+# Accuracy for epoch 2: 0.7543
+# Accuracy for epoch 3: 0.7828
+# Accuracy for epoch 4: 0.7904
+# Accuracy for epoch 5: 0.7953
+# Accuracy for epoch 6: 0.8029
+# Accuracy for epoch 7: 0.8106
+# Accuracy for epoch 8: 0.8129
+# Accuracy for epoch 9: 0.8166
+# Time to train for non-batched implementation: 72.24560856819153
+# Accuracy for epoch 0: 0.6151
+# Accuracy for epoch 1: 0.7226
+# Accuracy for epoch 2: 0.7448
+# Accuracy for epoch 3: 0.7543
+# Accuracy for epoch 4: 0.7592
+# Accuracy for epoch 5: 0.7614
+# Accuracy for epoch 6: 0.7695
+# Accuracy for epoch 7: 0.7724
+# Accuracy for epoch 8: 0.7696
+# Accuracy for epoch 9: 0.7711
+# Time to train for batched implementation: 57.75354361534119
 #
 # Process finished with exit code 0
+
